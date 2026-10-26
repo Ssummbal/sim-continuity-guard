@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f5f2;
+  --foreground: #18211f;
+  --surface: #ffffff;
+  --surface-muted: #eef1ed;
+  --border: #dce2dc;
+  --muted: #5b6762;
+  --accent: #0e5a4c;
+  --accent-strong: #093f35;
+  --accent-soft: #e2efe9;
+  --risk-low: #1c6b40;
+  --risk-low-soft: #e7f3ea;
+  --risk-medium: #8a5a00;
+  --risk-medium-soft: #fbf0d7;
+  --risk-high: #9b2f2f;
+  --risk-high-soft: #fbe9e7;
+  --info: #3e5668;
+  --info-soft: #e9eef2;
+  --ring-track: #e5e8e2;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-line: var(--border);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-risk-low: var(--risk-low);
+  --color-risk-low-soft: var(--risk-low-soft);
+  --color-risk-medium: var(--risk-medium);
+  --color-risk-medium-soft: var(--risk-medium-soft);
+  --color-risk-high: var(--risk-high);
+  --color-risk-high-soft: var(--risk-high-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-ring-track: var(--ring-track);
   --font-sans: var(--font-geist-sans);
+  --font-serif: var(--font-source-serif);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--foreground);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-[0.18em] text-accent;
+  }
+
+  .btn,
+  .btn-primary,
+  .btn-secondary,
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-colors;
+  }
+
+  .btn-primary {
+    @apply border border-transparent bg-accent text-white hover:bg-accent-strong;
+  }
+
+  .btn-secondary {
+    @apply border border-line bg-surface text-foreground hover:bg-surface-muted;
+  }
+
+  .btn-danger {
+    @apply border border-risk-high/40 bg-surface text-risk-high hover:bg-risk-high-soft;
+  }
+
+  .btn:disabled,
+  .btn-primary:disabled,
+  .btn-secondary:disabled,
+  .btn-danger:disabled {
+    @apply cursor-not-allowed opacity-55;
+  }
+
+  .field-label {
+    @apply block text-sm font-semibold text-foreground;
+  }
+
+  .field-hint {
+    @apply mt-1.5 text-xs leading-relaxed text-muted;
+  }
+
+  .field-error {
+    @apply mt-1.5 text-xs font-medium text-risk-high;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    @apply w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-sm text-foreground transition-colors placeholder:text-muted/60 hover:border-muted/40 focus:border-accent;
+  }
+
+  .textarea {
+    @apply min-h-32 resize-y leading-relaxed;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-surface;
+  }
+
+  .text-link {
+    @apply font-semibold text-accent underline-offset-4 hover:underline;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
