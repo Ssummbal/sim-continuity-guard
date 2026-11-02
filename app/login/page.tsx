@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { LoginForm } from "@/components/login-form";
+import { SignupNotice } from "@/components/signup-notice";
 
 export const metadata: Metadata = {
   title: "Sign in",
@@ -35,12 +37,15 @@ export default function LoginPage() {
           </p>
 
           <div className="mt-6">
+            <Suspense fallback={null}>
+              <SignupNotice />
+            </Suspense>
             <LoginForm />
           </div>
 
           <p className="mt-6 border-t border-line pt-4 text-xs leading-relaxed text-muted">
-            New accounts start as pending. An administrator must approve them
-            before you can open the queue or audit log.
+            New accounts are approved automatically after you confirm your
+            email address.
           </p>
         </section>
       </div>

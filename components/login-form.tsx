@@ -139,8 +139,8 @@ export function LoginForm() {
           </button>
 
           <p className="text-xs leading-relaxed text-muted">
-            New accounts start as pending and need administrator approval before
-            they can open the queue or audit log.
+            New accounts are approved automatically after you confirm your email
+            address.
           </p>
         </form>
       ) : (

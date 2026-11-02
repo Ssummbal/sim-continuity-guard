@@ -109,11 +109,8 @@ export async function signUp(
   }
 
   if (data.session) {
-    redirect("/pending");
+    redirect("/");
   }
 
-  return {
-    message:
-      "Check your email to confirm your account. An administrator must approve it before you can sign in.",
-  };
+  redirect("/login?status=check-email");
 }
