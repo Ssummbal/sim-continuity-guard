@@ -2,7 +2,7 @@
 
 A frontend prototype for a trust and safety workflow around recycled mobile numbers in Saudi Arabia. It shows how a reassigned number can inherit identity risk from its previous owner, how an AI-style model scores that risk, and how a human reviewer makes the consequential decisions.
 
-The prototype uses mocked, in-memory data. It is built with Next.js App Router, TypeScript, and Tailwind CSS. `stc` is used as the example carrier and all numbers use Saudi mobile formats.
+The prototype uses Supabase Postgres for persistence. It is built with Next.js App Router, TypeScript, and Tailwind CSS. `stc` is used as the example carrier and all numbers use Saudi mobile formats.
 
 ## Run locally
 
@@ -62,76 +62,45 @@ Data access is deliberately isolated:
 
 - `lib/types.ts` — shared `Case`, `RiskSignal`, `Decision`, `AuditEntry`, and input types.
 - `lib/risk.ts` — pure `assessRisk(input)` scoring function.
-- `lib/mock-data.ts` — 12 seeded cases and their audit entries. Imported only by the data layer.
 - `lib/db.ts` — the only data access surface: `getCases`, `getCaseById`, `createCase`, `updateCaseDecision`, and `getAuditLog`.
+- `lib/supabase/database.ts` — typed row and RPC definitions for the Supabase schema.
+- `lib/supabase/client.ts` — browser client using the public URL and publishable key.
+- `lib/supabase/server.ts` — cookie-based server client for future authenticated reads.
+- `lib/supabase/admin.ts` — server-only admin client using the secret key.
 - `app/*/page.tsx` — server components by default.
 - `components/assess-form.tsx` and `components/decision-form.tsx` — client components only where interaction is needed.
 - `app/assess/actions.ts` and `app/queue/[id]/actions.ts` — server actions for form submission.
 
-Pages and components never read the mock array directly. They call functions from `lib/db.ts`, which currently reads and writes an in-memory store seeded from `lib/mock-data.ts`.
+Pages and components never read the database directly. They call functions from `lib/db.ts`, which reads and writes Supabase using the server-only admin client. Anonymous clients have no table access; authenticated staff have read-only policies for future use.
 
 Because the project enables `cacheComponents`, pages that read data await `connection()` and render dynamic content inside `<Suspense>`. The static shell still renders immediately while the case data streams in.
 
-### Mock data behaviour
+## Database setup
 
-- 12 realistic cases span low, medium, and high risk, with pending and decided examples.
-- The store is seeded lazily on first data access.
-- In development, the in-memory store is attached to `globalThis` so hot reloads do not wipe it.
-- The data resets whenever the server process restarts.
+The app uses Supabase Postgres through the server-only admin client. The browser never talks to the database directly.
 
-## Next week: connecting the database
+1. Create a Supabase project and copy the project URL, publishable key, and secret key into `.env.local`:
 
-Replace the five functions in `lib/db.ts`. Their signatures are intended to stay the same so pages, components, and server actions do not need to change.
+   ```bash
+   NEXT_PUBLIC_SUPABASE_URL=https://<project-ref>.supabase.co
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_...
+   SUPABASE_SECRET_KEY=sb_secret_...
+   ```
 
-| Function | What the database implementation needs to do |
-| --- | --- |
-| `getCases(query)` | Select cases, apply optional `level` and `status` filters, map rows to `Case` objects |
-| `getCaseById(id)` | Select one case by ID and map it to `Case`, returning `null` if missing |
-| `createCase(input)` | Run `assessRisk`, insert the case, and insert an `auto_cleared` audit entry when the level is low |
-| `updateCaseDecision(caseId, decision)` | In one transaction: confirm the case is still `pending`, update status and decision fields, then insert the audit entry |
-| `getAuditLog()` | Select audit entries newest first and map them to `AuditEntry` |
+   `.env*` files are gitignored. Never commit the secret key. Only `NEXT_PUBLIC_*` values are exposed to the browser.
 
-Suggested steps:
+2. Run `supabase/migrations/0001_init.sql` in the Supabase SQL editor. It creates the `cases` and `audit_entries` tables, indexes, row-level security policies, and two transactional functions:
 
-1. Add a Postgres client and migrations (for example Prisma, Drizzle, or `pg`). Put `DATABASE_URL` in `.env.local`.
-2. Create `cases` and `audit_entries` tables. Store `signals` and `decision` as `jsonb` to match the current type shape.
-3. Keep `lib/mock-data.ts` as a seed script for local development rather than a runtime dependency.
-4. Remove the `globalThis` store and the in-memory array from `lib/db.ts`.
-5. Make `updateCaseDecision` transactional and enforce the pending-only rule in SQL. Decisions should remain immutable.
-6. Keep the existing `revalidatePath` calls in the server actions so the queue, case file, reviewer view, and audit log refresh after a mutation.
-7. Replace the demo reviewer name field with the authenticated reviewer from your session when auth is added.
+   | Function | Behaviour |
+   | --- | --- |
+   | `create_case(...)` | Inserts the assessed case and, for low-risk cases, the `auto_cleared` audit entry in one transaction |
+   | `decide_case(...)` | Updates a `pending` case and inserts its audit entry in one transaction; raises if the case is missing or already decided |
 
-Suggested tables:
+3. Optionally run `supabase/seed.sql` on a fresh database to load 12 demo cases and their audit entries.
 
-```sql
-create table cases (
-  id text primary key,
-  phone_number text not null,
-  carrier text not null default 'stc',
-  days_inactive integer not null,
-  was_recycled boolean not null,
-  linked_accounts integer not null,
-  recent_sim_swap boolean not null,
-  device_changed boolean not null,
-  score integer not null,
-  level text not null,
-  signals jsonb not null,
-  recommended_action text not null,
-  status text not null,
-  created_at timestamptz not null,
-  updated_at timestamptz not null,
-  decision jsonb
-);
+4. Start the app with `npm run dev`.
 
-create table audit_entries (
-  id text primary key,
-  case_id text not null references cases(id),
-  decision text not null,
-  reviewer text not null,
-  reason text not null,
-  created_at timestamptz not null
-);
-```
+`lib/db.ts` maps the snake_case rows to the `Case` and `AuditEntry` types. The scoring stays in `lib/risk.ts`; only the resulting score, level, signals, and recommended action are persisted. The admin client bypasses RLS, so the app works before authentication is added; the cookie server client is ready for authenticated reads once a login flow exists.
 
 ## Accessibility and design notes
 
@@ -143,7 +112,6 @@ create table audit_entries (
 
 ## Known prototype limits
 
-- No authentication or authorisation.
-- No persistent database; data resets with the server.
-- No real stc integration or SMS verification.
+- No authentication flow yet. The app uses the server-only admin client; RLS denies anonymous access and allows authenticated reads for when login is added.
 - The reviewer name is editable demo input, not a verified identity.
+- No real stc integration or SMS verification.

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { requireUser } from "@/lib/auth";
 import { updateCaseDecision } from "@/lib/db";
 import { isDecisionOutcome } from "@/lib/labels";
 import type { DecisionActionState } from "@/lib/types";
@@ -11,6 +12,8 @@ export async function submitDecision(
   _previousState: DecisionActionState,
   formData: FormData,
 ): Promise<DecisionActionState> {
+  await requireUser();
+
   const caseId = String(formData.get("caseId") ?? "").trim();
   const outcomeValue = String(formData.get("outcome") ?? "");
   const reviewer = String(formData.get("reviewer") ?? "");

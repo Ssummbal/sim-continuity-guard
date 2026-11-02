@@ -1,21 +1,16 @@
-import { statusForOutcome } from "./labels";
-import { createSeedAuditEntries, createSeedCases } from "./mock-data";
+import "server-only";
+
 import { assessRisk } from "./risk";
+import { getSupabaseAdmin } from "./supabase/admin";
+import type { AuditRow, CaseRow } from "./supabase/database";
 import type {
-  AuditDecision,
   AuditEntry,
   Case,
   CaseQuery,
+  CaseStatus,
   DecisionOutcome,
   RiskInput,
 } from "./types";
-
-interface Store {
-  initialized: boolean;
-  cases: Case[];
-  audit: AuditEntry[];
-  nextCaseNumber: number;
-}
 
 export interface DecisionInput {
   outcome: DecisionOutcome;
@@ -23,139 +18,132 @@ export interface DecisionInput {
   reason: string;
 }
 
-const globalStore = globalThis as typeof globalThis & {
-  __simContinuityGuardStore?: Store;
-};
-
-function seedStore(): Store {
-  const now = new Date();
-  const cases = createSeedCases(now);
-  const highestId = cases.reduce((highest, item) => {
-    const numericId = Number(item.id.replace("SCG-", ""));
-    return Number.isFinite(numericId) ? Math.max(highest, numericId) : highest;
-  }, 1000);
-
+function toCase(row: CaseRow): Case {
   return {
-    initialized: true,
-    cases,
-    audit: createSeedAuditEntries(cases),
-    nextCaseNumber: highestId + 1,
+    id: row.id,
+    phoneNumber: row.phone_number,
+    carrier: row.carrier,
+    daysInactive: row.days_inactive,
+    wasRecycled: row.was_recycled,
+    linkedAccounts: row.linked_accounts,
+    recentSimSwap: row.recent_sim_swap,
+    deviceChanged: row.device_changed,
+    score: row.score,
+    level: row.level,
+    signals: row.signals,
+    recommendedAction: row.recommended_action,
+    status: row.status,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    ...(row.decision ? { decision: row.decision } : {}),
   };
 }
 
-function getStore(): Store {
-  if (!globalStore.__simContinuityGuardStore) {
-    globalStore.__simContinuityGuardStore = seedStore();
-  }
-
-  return globalStore.__simContinuityGuardStore;
-}
-
-function clone<T>(value: T): T {
-  return structuredClone(value);
+function toAuditEntry(row: AuditRow): AuditEntry {
+  return {
+    id: row.id,
+    caseId: row.case_id,
+    phoneNumber: row.phone_number,
+    decision: row.decision,
+    reviewer: row.reviewer,
+    reason: row.reason,
+    timestamp: row.created_at,
+  };
 }
 
 export async function getCases(query: CaseQuery = {}): Promise<Case[]> {
   const { level = "all", status = "all" } = query;
-  const cases = getStore().cases;
+  let request = getSupabaseAdmin().from("cases").select("*");
 
-  return cases
-    .filter((item) => level === "all" || item.level === level)
-    .filter((item) => status === "all" || item.status === status)
-    .map((item) => clone(item));
+  if (level !== "all") {
+    request = request.eq("level", level);
+  }
+
+  if (status !== "all") {
+    request = request.eq("status", status);
+  }
+
+  const { data, error } = await request;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data.map(toCase);
 }
 
 export async function getCaseById(id: string): Promise<Case | null> {
   const normalizedId = id.trim().toUpperCase();
-  const item = getStore().cases.find((entry) => entry.id === normalizedId);
-  return item ? clone(item) : null;
+  const { data, error } = await getSupabaseAdmin()
+    .from("cases")
+    .select("*")
+    .eq("id", normalizedId)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ? toCase(data) : null;
 }
 
 export async function createCase(input: RiskInput): Promise<Case> {
-  const store = getStore();
   const assessment = assessRisk(input);
-  const timestamp = new Date().toISOString();
-  const id = `SCG-${String(store.nextCaseNumber).padStart(4, "0")}`;
-  store.nextCaseNumber += 1;
+  const status: CaseStatus =
+    assessment.level === "low" ? "auto_cleared" : "pending";
+  const autoClearReason = `Low risk score (${assessment.score}/100) is below the human-review threshold. Auto-cleared by policy.`;
 
-  const newCase: Case = {
-    ...input,
-    id,
-    carrier: "stc",
-    score: assessment.score,
-    level: assessment.level,
-    signals: assessment.signals,
-    recommendedAction: assessment.recommendedAction,
-    status: assessment.level === "low" ? "auto_cleared" : "pending",
-    createdAt: timestamp,
-    updatedAt: timestamp,
-  };
+  const { data, error } = await getSupabaseAdmin().rpc("create_case", {
+    p_phone_number: input.phoneNumber,
+    p_days_inactive: input.daysInactive,
+    p_was_recycled: input.wasRecycled,
+    p_linked_accounts: input.linkedAccounts,
+    p_recent_sim_swap: input.recentSimSwap,
+    p_device_changed: input.deviceChanged,
+    p_score: assessment.score,
+    p_level: assessment.level,
+    p_signals: assessment.signals,
+    p_recommended_action: assessment.recommendedAction,
+    p_status: status,
+    p_audit_reviewer: status === "auto_cleared" ? "System policy" : null,
+    p_audit_reason: status === "auto_cleared" ? autoClearReason : null,
+  });
 
-  store.cases.push(newCase);
-
-  if (newCase.status === "auto_cleared") {
-    store.audit.push({
-      id: `AUD-${id.slice(4)}`,
-      caseId: id,
-      phoneNumber: newCase.phoneNumber,
-      decision: "auto_cleared",
-      reviewer: "System policy",
-      reason: `Low risk score (${newCase.score}/100) is below the human-review threshold. Auto-cleared by policy.`,
-      timestamp,
-    });
+  if (error) {
+    throw new Error(error.message);
   }
 
-  return clone(newCase);
+  return toCase(data);
 }
 
 export async function updateCaseDecision(
   caseId: string,
   decision: DecisionInput,
 ): Promise<Case> {
-  const store = getStore();
   const normalizedId = caseId.trim().toUpperCase();
-  const item = store.cases.find((entry) => entry.id === normalizedId);
-
-  if (!item) {
-    throw new Error("Case not found.");
-  }
-
-  if (item.status !== "pending") {
-    throw new Error("This case has already been decided.");
-  }
-
-  const timestamp = new Date().toISOString();
-  const status = statusForOutcome(decision.outcome);
-
-  item.status = status;
-  item.updatedAt = timestamp;
-  item.decision = {
-    outcome: decision.outcome,
-    reviewer: decision.reviewer.trim(),
-    reason: decision.reason.trim(),
-    decidedAt: timestamp,
-  };
-
-  store.audit.push({
-    id: `AUD-${item.id.slice(4)}-${Date.now().toString(36).toUpperCase()}`,
-    caseId: item.id,
-    phoneNumber: item.phoneNumber,
-    decision: status as AuditDecision,
-    reviewer: item.decision.reviewer,
-    reason: item.decision.reason,
-    timestamp,
+  const { data, error } = await getSupabaseAdmin().rpc("decide_case", {
+    p_case_id: normalizedId,
+    p_outcome: decision.outcome,
+    p_reviewer: decision.reviewer.trim(),
+    p_reason: decision.reason.trim(),
   });
 
-  return clone(item);
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return toCase(data);
 }
 
 export async function getAuditLog(): Promise<AuditEntry[]> {
-  return getStore()
-    .audit.slice()
-    .sort(
-      (left, right) =>
-        new Date(right.timestamp).getTime() -
-        new Date(left.timestamp).getTime(),
-    )
-    .map((entry) => clone(entry));
+  const { data, error } = await getSupabaseAdmin()
+    .from("audit_entries")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data.map(toAuditEntry);
 }

@@ -13,6 +13,7 @@ import { OutcomePanel } from "@/components/outcome-panel";
 import { ScoreRing } from "@/components/score-ring";
 import { SignalList } from "@/components/signal-list";
 import { CaseSkeleton } from "@/components/skeletons";
+import { requireUser } from "@/lib/auth";
 import { getCaseById } from "@/lib/db";
 import { formatAge, formatDateTime } from "@/lib/format";
 import { actionLabel } from "@/lib/labels";
@@ -44,6 +45,7 @@ export default function CasePage({ params }: PageProps<"/cases/[id]">) {
 async function CaseContent({
   params,
 }: Pick<PageProps<"/cases/[id]">, "params">) {
+  await requireUser();
   await connection();
   const { id } = await params;
   const item = await getCaseById(id);

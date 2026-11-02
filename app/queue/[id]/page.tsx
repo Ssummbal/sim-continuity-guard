@@ -10,6 +10,7 @@ import { OutcomePanel } from "@/components/outcome-panel";
 import { ScoreRing } from "@/components/score-ring";
 import { SignalList } from "@/components/signal-list";
 import { CaseSkeleton } from "@/components/skeletons";
+import { requireUser } from "@/lib/auth";
 import { getCaseById } from "@/lib/db";
 import { formatAge, formatDateTime } from "@/lib/format";
 import { actionLabel } from "@/lib/labels";
@@ -35,6 +36,7 @@ export default function ReviewPage({ params }: PageProps<"/queue/[id]">) {
 async function ReviewContent({
   params,
 }: Pick<PageProps<"/queue/[id]">, "params">) {
+  await requireUser();
   await connection();
   const { id } = await params;
   const item = await getCaseById(id);

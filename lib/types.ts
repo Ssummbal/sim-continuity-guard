@@ -95,3 +95,7 @@ export interface DecisionActionState {
   message?: string;
   errors?: DecisionFieldErrors;
 }
+
+export interface LoginActionState {
+  error?: string;
+}

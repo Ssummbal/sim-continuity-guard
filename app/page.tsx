@@ -1,6 +1,9 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { RiskBadge, UrgentBadge } from "@/components/badges";
 import { ScoreRing } from "@/components/score-ring";
+import { HomeGateSkeleton } from "@/components/skeletons";
+import { requireUser } from "@/lib/auth";
 
 const problemSteps = [
   {
@@ -42,9 +45,18 @@ const exampleSignals = [
   { label: "200 days dormant", points: "+12" },
 ];
 
+async function SessionGate() {
+  await requireUser();
+  return null;
+}
+
 export default function HomePage() {
   return (
     <main id="content">
+      <Suspense fallback={<HomeGateSkeleton />}>
+        <SessionGate />
+      </Suspense>
+
       <section className="relative overflow-hidden border-b border-line bg-surface">
         <div
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_82%_18%,var(--accent-soft),transparent_48%)]"

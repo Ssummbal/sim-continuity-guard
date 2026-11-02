@@ -10,6 +10,32 @@ function StatusLabel({ label }: { label: string }) {
   );
 }
 
+export function HomeGateSkeleton() {
+  return (
+    <div>
+      <StatusLabel label="Checking your session" />
+      <div aria-hidden="true" className="h-1 w-full animate-pulse bg-line" />
+    </div>
+  );
+}
+
+export function AssessSkeleton() {
+  return (
+    <div>
+      <StatusLabel label="Loading the assessment form" />
+      <div aria-hidden="true" className="animate-pulse space-y-6">
+        <Bar className="w-24" />
+        <Bar className="h-10 w-80 max-w-full" />
+        <Bar className="w-full max-w-2xl" />
+        <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_356px]">
+          <div className="card h-96" />
+          <div className="card h-64" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function QueueSkeleton() {
   return (
     <div>

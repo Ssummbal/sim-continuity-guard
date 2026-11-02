@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { requireUser } from "@/lib/auth";
 import { createCase } from "@/lib/db";
 import type { AssessmentActionState } from "@/lib/types";
 import {
@@ -13,6 +14,8 @@ export async function submitAssessment(
   _previousState: AssessmentActionState,
   formData: FormData,
 ): Promise<AssessmentActionState> {
+  await requireUser();
+
   const values = formValuesFromFormData(formData);
   const { errors, input } = validateAssessmentValues(values);
 

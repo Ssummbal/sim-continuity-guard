@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Suspense } from "react";
 import { AssessForm } from "@/components/assess-form";
 import { RiskBadge } from "@/components/badges";
+import { AssessSkeleton } from "@/components/skeletons";
+import { requireUser } from "@/lib/auth";
 import { RISK_THRESHOLDS, RISK_WEIGHTS } from "@/lib/risk";
 
 export const metadata: Metadata = {
@@ -18,7 +21,22 @@ const scoreSignals = [
 
 export default function AssessPage() {
   return (
-    <main id="content" className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
+    <main
+      id="content"
+      className="mx-auto w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14"
+    >
+      <Suspense fallback={<AssessSkeleton />}>
+        <AssessContent />
+      </Suspense>
+    </main>
+  );
+}
+
+async function AssessContent() {
+  await requireUser();
+
+  return (
+    <>
       <Link
         href="/"
         className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-foreground"
@@ -123,6 +141,6 @@ export default function AssessPage() {
           </section>
         </aside>
       </div>
-    </main>
+    </>
   );
 }

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { RiskBadge, StatusBadge, UrgentBadge } from "@/components/badges";
 import { EmptyState } from "@/components/empty-state";
 import { QueueSkeleton } from "@/components/skeletons";
+import { requireUser } from "@/lib/auth";
 import { getCases } from "@/lib/db";
 import { formatAge, formatCount } from "@/lib/format";
 import {
@@ -74,6 +75,7 @@ export default function QueuePage({ searchParams }: PageProps<"/queue">) {
 async function QueueContent({
   searchParams,
 }: Pick<PageProps<"/queue">, "searchParams">) {
+  await requireUser();
   await connection();
   const params = await searchParams;
   const levelParam = readParam(params.level);

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { DecisionBadge } from "@/components/badges";
 import { EmptyState } from "@/components/empty-state";
 import { AuditSkeleton } from "@/components/skeletons";
+import { requireUser } from "@/lib/auth";
 import { getAuditLog } from "@/lib/db";
 import { formatCount, formatDateTime } from "@/lib/format";
 import { formatSaudiPhone } from "@/lib/phone";
@@ -46,6 +47,7 @@ export default function AuditPage() {
 }
 
 async function AuditContent() {
+  await requireUser();
   await connection();
   const entries = await getAuditLog();
   const humanDecisions = entries.filter(
