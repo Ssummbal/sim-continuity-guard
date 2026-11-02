@@ -19,11 +19,13 @@ function redirectWithCookies(url: URL, source: NextResponse) {
   return redirectResponse;
 }
 
+const publicPaths = new Set(["/login", "/pending"]);
+
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
   const { pathname } = request.nextUrl;
 
-  if (!user && pathname !== "/login") {
+  if (!user && !publicPaths.has(pathname)) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
     loginUrl.search = "";

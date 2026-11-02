@@ -96,6 +96,14 @@ export interface DecisionActionState {
   errors?: DecisionFieldErrors;
 }
 
+export type ProfileStatus = "pending" | "approved" | "rejected";
+
+export type AuthField = "email" | "password" | "confirmPassword";
+
+export type AuthFieldErrors = Partial<Record<AuthField, string>>;
+
 export interface LoginActionState {
   error?: string;
+  message?: string;
+  errors?: AuthFieldErrors;
 }

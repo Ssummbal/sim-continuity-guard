@@ -36,6 +36,14 @@ export type AuditRow = {
   created_at: string;
 };
 
+export type ProfileRow = {
+  id: string;
+  email: string | null;
+  status: "pending" | "approved" | "rejected";
+  role: string;
+  created_at: string;
+};
+
 type CaseInsert = {
   id?: string;
   phone_number: string;
@@ -65,6 +73,14 @@ type AuditInsert = {
   created_at?: string;
 };
 
+type ProfileInsert = {
+  id: string;
+  email?: string | null;
+  status?: "pending" | "approved" | "rejected";
+  role?: string;
+  created_at?: string;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -78,6 +94,12 @@ export interface Database {
         Row: AuditRow;
         Insert: AuditInsert;
         Update: Partial<AuditInsert>;
+        Relationships: [];
+      };
+      profiles: {
+        Row: ProfileRow;
+        Insert: ProfileInsert;
+        Update: Partial<ProfileInsert>;
         Relationships: [];
       };
     };

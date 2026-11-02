@@ -27,11 +27,11 @@ export default function LoginPage() {
             id="login-heading"
             className="mt-3 font-serif text-3xl font-semibold tracking-tight"
           >
-            Sign in
+            Reviewer access
           </h1>
           <p className="mt-3 text-sm leading-relaxed text-muted">
-            Use your reviewer account to open the assessment queue and audit
-            log. All actions are recorded against your account.
+            Sign in to open the assessment queue and audit log, or create an
+            account. All actions are recorded against your account.
           </p>
 
           <div className="mt-6">
@@ -39,8 +39,8 @@ export default function LoginPage() {
           </div>
 
           <p className="mt-6 border-t border-line pt-4 text-xs leading-relaxed text-muted">
-            Accounts are created by an administrator. There is no public
-            sign-up.
+            New accounts start as pending. An administrator must approve them
+            before you can open the queue or audit log.
           </p>
         </section>
       </div>
