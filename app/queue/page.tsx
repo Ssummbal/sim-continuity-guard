@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { RiskBadge, StatusBadge, UrgentBadge } from "@/components/badges";
+import { Chat } from "@/components/chat";
 import { EmptyState } from "@/components/empty-state";
 import { QueueSkeleton } from "@/components/skeletons";
 import { requireUser } from "@/lib/auth";
@@ -209,6 +210,10 @@ async function QueueContent({
           </div>
         </div>
       </form>
+
+      <div className="mt-6">
+        <Chat />
+      </div>
 
       <div className="mt-8 flex flex-wrap items-end justify-between gap-3">
         <div>

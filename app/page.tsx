@@ -147,9 +147,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-accent text-white">
+      <section className="bg-primary text-white">
         <div className="mx-auto grid w-full max-w-6xl gap-6 px-5 py-10 sm:px-8 sm:py-12 md:grid-cols-[0.7fr_1.3fr] md:items-start">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
             Operating principle
           </p>
           <div>
@@ -157,7 +157,7 @@ export default function HomePage() {
               AI does the mechanical work. Humans govern the consequential
               decisions.
             </p>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/75">
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/90">
               The score is deterministic and every signal is visible. Approval,
               rejection, and requests for more information require a named
               reviewer and a written reason.
@@ -208,7 +208,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-10 grid gap-4 lg:grid-cols-2">
-            <article className="rounded-2xl border border-line bg-background p-7 sm:p-8">
+            <article className="rounded-2xl border border-line bg-background p-7 shadow-[var(--shadow-sm)] sm:p-8">
               <p className="eyebrow">Mechanical work</p>
               <h3 className="mt-3 font-serif text-2xl font-semibold tracking-tight">
                 The model handles the arithmetic
@@ -232,7 +232,7 @@ export default function HomePage() {
               </ul>
             </article>
 
-            <article className="rounded-2xl border border-accent/20 bg-accent-soft p-7 sm:p-8">
+            <article className="rounded-2xl border border-accent/20 bg-accent-soft p-7 shadow-[var(--shadow-sm)] sm:p-8">
               <p className="eyebrow">Consequential decisions</p>
               <h3 className="mt-3 font-serif text-2xl font-semibold tracking-tight">
                 A reviewer owns the outcome
@@ -258,7 +258,7 @@ export default function HomePage() {
           </div>
 
           <div className="mt-4 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-risk-low/20 bg-risk-low-soft/60 p-5">
+            <div className="rounded-xl border border-risk-low/20 bg-risk-low-soft/60 p-5 shadow-[var(--shadow-sm)]">
               <div className="flex items-center justify-between gap-2">
                 <RiskBadge level="low" />
                 <span className="font-mono text-xs text-muted">0–29</span>
@@ -268,7 +268,7 @@ export default function HomePage() {
                 Below the review threshold. Logged automatically.
               </p>
             </div>
-            <div className="rounded-xl border border-risk-medium/20 bg-risk-medium-soft/60 p-5">
+            <div className="rounded-xl border border-risk-medium/20 bg-risk-medium-soft/60 p-5 shadow-[var(--shadow-sm)]">
               <div className="flex items-center justify-between gap-2">
                 <RiskBadge level="medium" />
                 <span className="font-mono text-xs text-muted">30–69</span>
@@ -278,7 +278,7 @@ export default function HomePage() {
                 Routed to a named reviewer in the queue.
               </p>
             </div>
-            <div className="rounded-xl border border-risk-high/20 bg-risk-high-soft/60 p-5">
+            <div className="rounded-xl border border-risk-high/20 bg-risk-high-soft/60 p-5 shadow-[var(--shadow-sm)]">
               <div className="flex items-center justify-between gap-2">
                 <RiskBadge level="high" />
                 <span className="font-mono text-xs text-muted">70–100</span>
@@ -342,16 +342,16 @@ export default function HomePage() {
       </section>
 
       <section className="mx-auto w-full max-w-6xl px-5 pb-16 sm:px-8 sm:pb-20">
-        <div className="rounded-2xl bg-accent p-7 text-white sm:p-12">
+        <div className="rounded-2xl bg-primary p-7 text-white shadow-[var(--shadow-lg)] sm:p-12">
           <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
             <div className="max-w-2xl">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/80">
                 Try the prototype
               </p>
               <h2 className="mt-3 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
                 Score a reassignment. Then make the call.
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-white/75">
+              <p className="mt-3 text-sm leading-relaxed text-white/90">
                 Every assessment produces an explainable case file. Medium and
                 high risk cases wait for a human decision and a written reason.
               </p>
@@ -359,7 +359,7 @@ export default function HomePage() {
             <div className="flex flex-wrap gap-3">
               <Link
                 href="/assess"
-                className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-accent transition-colors hover:bg-accent-soft"
+                className="rounded-lg bg-white px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-accent-soft"
               >
                 Run an assessment
               </Link>

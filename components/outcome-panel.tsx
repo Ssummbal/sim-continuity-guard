@@ -8,7 +8,7 @@ export function OutcomePanel({ item }: { item: Case }) {
   if (item.status === "auto_cleared") {
     return (
       <section
-        className="rounded-2xl border border-risk-low/25 bg-risk-low-soft/60 p-6"
+        className="rounded-2xl border border-risk-low/25 bg-risk-low-soft/60 p-6 shadow-[var(--shadow-sm)]"
         aria-labelledby="outcome-heading"
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-risk-low">
@@ -36,7 +36,7 @@ export function OutcomePanel({ item }: { item: Case }) {
     return (
       <section
         className={cx(
-          "rounded-2xl border p-6",
+          "rounded-2xl border p-6 shadow-[var(--shadow-sm)]",
           high
             ? "border-risk-high/25 bg-risk-high-soft/50"
             : "border-risk-medium/25 bg-risk-medium-soft/50",
@@ -67,7 +67,7 @@ export function OutcomePanel({ item }: { item: Case }) {
 
   return (
     <section
-      className="rounded-2xl border border-line bg-surface p-6"
+      className="card p-6"
       aria-labelledby="outcome-heading"
     >
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-muted">

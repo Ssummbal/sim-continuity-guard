@@ -9,6 +9,7 @@ import {
   UrgentBadge,
 } from "@/components/badges";
 import { CaseFacts } from "@/components/case-facts";
+import { Chat } from "@/components/chat";
 import { OutcomePanel } from "@/components/outcome-panel";
 import { ScoreRing } from "@/components/score-ring";
 import { SignalList } from "@/components/signal-list";
@@ -170,6 +171,10 @@ async function CaseContent({
             </div>
           </section>
         </aside>
+      </div>
+
+      <div className="mt-10">
+        <Chat />
       </div>
     </>
   );

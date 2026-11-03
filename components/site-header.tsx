@@ -10,15 +10,15 @@ const navigation = [
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-line bg-surface/95 backdrop-blur">
-      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-3 sm:px-8">
+    <header className="sticky top-0 z-40 border-b border-line bg-surface/95 shadow-[var(--shadow-sm)] backdrop-blur">
+      <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-5 py-3.5 sm:px-8">
         <Link
           href="/"
-          className="flex items-center gap-3 rounded-md"
+          className="flex items-center gap-3 rounded-lg focus-visible:outline-offset-4"
           aria-label="SIM Continuity Guard home"
         >
           <span
-            className="grid size-9 place-items-center rounded-lg bg-accent text-white"
+            className="grid size-9 place-items-center rounded-lg bg-primary text-white shadow-[var(--shadow-sm)]"
             aria-hidden="true"
           >
             <svg
@@ -55,7 +55,7 @@ export function SiteHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className="rounded px-1 py-1 text-muted transition-colors hover:text-foreground"
+              className="rounded-lg px-2.5 py-1.5 text-muted transition-colors hover:bg-surface-muted hover:text-foreground"
             >
               {item.label}
             </Link>

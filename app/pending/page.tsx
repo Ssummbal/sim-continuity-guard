@@ -9,7 +9,7 @@ export default function PendingPage() {
   return (
     <main
       id="content"
-      className="mx-auto flex w-full max-w-6xl flex-1 items-center justify-center px-5 py-10 sm:px-8 sm:py-14"
+      className="mx-auto flex w-full max-w-6xl flex-1 items-center justify-center bg-[radial-gradient(ellipse_at_top,var(--accent-soft),transparent_62%)] px-5 py-10 sm:px-8 sm:py-14"
     >
       <div className="w-full max-w-md">
         <section

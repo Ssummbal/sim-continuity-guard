@@ -128,7 +128,7 @@ async function AssessContent() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-accent/20 bg-accent-soft p-6">
+          <section className="rounded-2xl border border-accent/20 bg-accent-soft p-6 shadow-[var(--shadow-sm)]">
             <p className="eyebrow">Human in the loop</p>
             <p className="mt-2 text-sm leading-relaxed text-foreground">
               The assessment is advisory. A named reviewer makes every

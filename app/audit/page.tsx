@@ -103,7 +103,7 @@ async function AuditContent() {
             time.
           </p>
 
-          <div className="mt-3 hidden overflow-hidden rounded-2xl border border-line bg-surface lg:block">
+          <div className="card mt-3 hidden overflow-hidden lg:block">
             <table className="w-full border-collapse text-left text-sm">
               <caption className="sr-only">
                 Audit log of automated clearances and human decisions

@@ -36,15 +36,15 @@ export function LoginForm() {
 
   return (
     <div className="space-y-5">
-      <div className="grid grid-cols-2 gap-1 rounded-lg border border-line bg-surface-muted p-1">
+      <div className="grid grid-cols-2 gap-1 rounded-full border border-line bg-surface-muted p-1">
         <button
           type="button"
           onClick={() => setMode("signin")}
           aria-pressed={!isSignUp}
-          className={`rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
+          className={`rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
             isSignUp
               ? "text-muted hover:text-foreground"
-              : "bg-surface text-foreground shadow-sm"
+              : "bg-surface text-accent shadow-[var(--shadow-sm)]"
           }`}
         >
           Sign in
@@ -53,9 +53,9 @@ export function LoginForm() {
           type="button"
           onClick={() => setMode("signup")}
           aria-pressed={isSignUp}
-          className={`rounded-md px-3 py-2 text-sm font-semibold transition-colors ${
+          className={`rounded-full px-3 py-2 text-sm font-semibold transition-colors ${
             isSignUp
-              ? "bg-surface text-foreground shadow-sm"
+              ? "bg-surface text-accent shadow-[var(--shadow-sm)]"
               : "text-muted hover:text-foreground"
           }`}
         >
