@@ -44,6 +44,12 @@ export type ProfileRow = {
   created_at: string;
 };
 
+export type ChatRateLimitRow = {
+  key: string;
+  window_start: string;
+  count: number;
+};
+
 type CaseInsert = {
   id?: string;
   phone_number: string;
@@ -81,6 +87,12 @@ type ProfileInsert = {
   created_at?: string;
 };
 
+type ChatRateLimitInsert = {
+  key: string;
+  window_start: string;
+  count?: number;
+};
+
 export interface Database {
   public: {
     Tables: {
@@ -102,6 +114,12 @@ export interface Database {
         Update: Partial<ProfileInsert>;
         Relationships: [];
       };
+      chat_rate_limits: {
+        Row: ChatRateLimitRow;
+        Insert: ChatRateLimitInsert;
+        Update: Partial<ChatRateLimitInsert>;
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: {
@@ -112,6 +130,14 @@ export interface Database {
       decide_case: {
         Args: Record<string, unknown>;
         Returns: CaseRow;
+      };
+      check_chat_rate_limit: {
+        Args: {
+          p_key: string;
+          p_limit: number;
+          p_window_seconds: number;
+        };
+        Returns: boolean;
       };
     };
     Enums: Record<string, never>;

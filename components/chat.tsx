@@ -16,7 +16,7 @@ type ChatMessage = {
   content: string;
 };
 
-const MAX_MESSAGE_LENGTH = 2000;
+const MAX_MESSAGE_LENGTH = 500;
 
 function errorMessageForStatus(status: number): string {
   switch (status) {
@@ -82,7 +82,7 @@ export function Chat({ className = "" }: { className?: string }) {
       role: "user",
       content: content.slice(0, MAX_MESSAGE_LENGTH),
     };
-    const nextMessages = [...messages, userMessage].slice(-10);
+    const nextMessages = [...messages, userMessage].slice(-6);
 
     setMessages(nextMessages);
     setInput("");

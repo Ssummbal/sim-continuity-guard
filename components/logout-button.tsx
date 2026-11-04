@@ -6,7 +6,7 @@ import { signOut } from "@/app/logout/actions";
 export function LogoutButton() {
   const pathname = usePathname();
 
-  if (pathname === "/login") {
+  if (pathname === "/login" || pathname === "/ask") {
     return null;
   }
 

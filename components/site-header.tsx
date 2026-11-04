@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { LogoutButton } from "@/components/logout-button";
 
 const navigation = [
+  { href: "/ask", label: "Ask Echo" },
   { href: "/assess", label: "Assess" },
   { href: "/queue", label: "Review queue" },
   { href: "/audit", label: "Audit log" },

@@ -19,7 +19,7 @@ function redirectWithCookies(url: URL, source: NextResponse) {
   return redirectResponse;
 }
 
-const publicPaths = new Set(["/login", "/pending"]);
+const publicPaths = new Set(["/login", "/pending", "/ask", "/api/chat"]);
 
 export async function proxy(request: NextRequest) {
   const { response, user } = await updateSession(request);
