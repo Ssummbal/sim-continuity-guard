@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { EchoChat } from "@/components/echo-chat";
 import { EchoMascot } from "@/components/echo-mascot";
 import { EchoMythCards } from "@/components/echo-myth-cards";
@@ -47,6 +48,9 @@ export default function AskPage() {
               <a href="#echo-quiz" className="btn-secondary">
                 Try the haunting check
               </a>
+              <Link href="/login" className="btn-secondary">
+                Sign in
+              </Link>
             </div>
             <p className="mt-4 max-w-xl text-xs leading-relaxed text-muted">
               General information only, not legal or financial advice. Echo

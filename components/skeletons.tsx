@@ -1,5 +1,21 @@
 function Bar({ className = "" }: { className?: string }) {
-  return <div className={`h-3 rounded-full bg-line ${className}`} />;
+  return <div className={`ghost-skeleton h-3 rounded-full ${className}`} />;
+}
+
+function GhostSkeleton({ className = "w-24" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 180 200"
+      className={`ghost-skeleton rounded-full ${className}`}
+      aria-hidden="true"
+    >
+      <path
+        d="M34 98c0-37 25-68 56-68s56 31 56 68v51c0 13-15 20-24 11l-10-9c-6-5-15-5-21 1l-8 8c-7 7-18 7-25 0l-8-8c-6-6-15-6-21-1l-10 9c-9 9-24 2-24-11V98Z"
+        fill="currentColor"
+        opacity="0.3"
+      />
+    </svg>
+  );
 }
 
 function StatusLabel({ label }: { label: string }) {
@@ -14,7 +30,7 @@ export function HomeGateSkeleton() {
   return (
     <div>
       <StatusLabel label="Checking your session" />
-      <div aria-hidden="true" className="h-1 w-full animate-pulse bg-line" />
+      <div aria-hidden="true" className="ghost-skeleton h-1 w-full" />
     </div>
   );
 }
@@ -23,7 +39,8 @@ export function AssessSkeleton() {
   return (
     <div>
       <StatusLabel label="Loading the assessment form" />
-      <div aria-hidden="true" className="animate-pulse space-y-6">
+      <div aria-hidden="true" className="space-y-6">
+        <GhostSkeleton className="w-20" />
         <Bar className="w-24" />
         <Bar className="h-10 w-80 max-w-full" />
         <Bar className="w-full max-w-2xl" />
@@ -40,7 +57,8 @@ export function QueueSkeleton() {
   return (
     <div>
       <StatusLabel label="Loading the review queue" />
-      <div aria-hidden="true" className="animate-pulse space-y-6">
+      <div aria-hidden="true" className="space-y-6">
+        <GhostSkeleton className="w-20" />
         <div className="grid gap-4 sm:grid-cols-3">
           {[0, 1, 2].map((item) => (
             <div key={item} className="card p-5">
@@ -76,7 +94,8 @@ export function CaseSkeleton() {
   return (
     <div>
       <StatusLabel label="Loading case details" />
-      <div aria-hidden="true" className="animate-pulse space-y-6">
+      <div aria-hidden="true" className="space-y-6">
+        <GhostSkeleton className="w-20" />
         <Bar className="w-32" />
         <Bar className="h-9 w-72 max-w-full" />
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
@@ -129,7 +148,8 @@ export function AuditSkeleton() {
   return (
     <div>
       <StatusLabel label="Loading the audit log" />
-      <div aria-hidden="true" className="animate-pulse space-y-6">
+      <div aria-hidden="true" className="space-y-6">
+        <GhostSkeleton className="w-20" />
         <div className="grid gap-4 sm:grid-cols-3">
           {[0, 1, 2].map((item) => (
             <div key={item} className="card p-5">

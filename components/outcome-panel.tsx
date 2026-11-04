@@ -8,15 +8,15 @@ export function OutcomePanel({ item }: { item: Case }) {
   if (item.status === "auto_cleared") {
     return (
       <section
-        className="rounded-2xl border border-risk-low/25 bg-risk-low-soft/60 p-6 shadow-[var(--shadow-sm)]"
+        className="rounded-[var(--radius-lg)] border border-mint/25 bg-mint-soft/60 p-6 shadow-[var(--shadow-sm)]"
         aria-labelledby="outcome-heading"
       >
-        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-risk-low">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-mint-strong">
           Outcome
         </p>
         <h2
           id="outcome-heading"
-          className="mt-2 font-serif text-2xl font-semibold tracking-tight"
+          className="mt-2 font-serif text-2xl font-bold tracking-tight"
         >
           Auto-cleared
         </h2>
@@ -36,7 +36,7 @@ export function OutcomePanel({ item }: { item: Case }) {
     return (
       <section
         className={cx(
-          "rounded-2xl border p-6 shadow-[var(--shadow-sm)]",
+          "rounded-[var(--radius-lg)] border p-6 shadow-[var(--shadow-sm)]",
           high
             ? "border-risk-high/25 bg-risk-high-soft/50"
             : "border-risk-medium/25 bg-risk-medium-soft/50",
@@ -48,7 +48,7 @@ export function OutcomePanel({ item }: { item: Case }) {
         </p>
         <h2
           id="outcome-heading"
-          className="mt-2 font-serif text-2xl font-semibold tracking-tight"
+          className="mt-2 font-serif text-2xl font-bold tracking-tight"
         >
           Sent to human review
         </h2>
@@ -75,7 +75,7 @@ export function OutcomePanel({ item }: { item: Case }) {
       </p>
       <h2
         id="outcome-heading"
-        className="mt-2 font-serif text-2xl font-semibold tracking-tight"
+        className="mt-2 font-serif text-2xl font-bold tracking-tight"
       >
         {item.decision ? outcomeLabel(item.decision.outcome) : "Decided"}
       </h2>

@@ -97,8 +97,15 @@ async function ReviewContent({
 
       <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="space-y-8">
-          <section className="card p-6 sm:p-8" aria-labelledby="assessment-heading">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+          <section
+            className="card relative overflow-hidden p-6 sm:p-8"
+            aria-labelledby="assessment-heading"
+          >
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_8%,var(--ghost-soft),transparent_42%)]"
+              aria-hidden="true"
+            />
+            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
               <ScoreRing score={item.score} level={item.level} />
               <div className="min-w-0">
                 <p className="eyebrow">AI assessment · advisory</p>
@@ -147,8 +154,10 @@ async function ReviewContent({
             <DecisionForm caseId={item.id} />
           ) : (
             <>
-              <div className="rounded-xl border border-line bg-surface-muted/70 px-4 py-3">
-                <p className="text-sm font-semibold">Case already decided</p>
+              <div className="rounded-[var(--radius-lg)] border border-mint/25 bg-mint-soft/60 px-4 py-3">
+                <p className="text-sm font-semibold text-mint-strong">
+                  Case already decided
+                </p>
                 <p className="mt-1 text-xs leading-relaxed text-muted">
                   Further decisions cannot be recorded from the review queue.
                 </p>

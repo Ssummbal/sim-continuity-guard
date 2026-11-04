@@ -1,23 +1,19 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Inter, Source_Serif_4 } from "next/font/google";
+import { Geist_Mono, Nunito } from "next/font/google";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { ToastHost } from "@/components/toast-host";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const nunito = Nunito({
+  variable: "--font-nunito",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
-
-const sourceSerif = Source_Serif_4({
-  variable: "--font-source-serif",
-  subsets: ["latin"],
-  weight: ["400", "600"],
 });
 
 export const metadata: Metadata = {
@@ -33,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${geistMono.variable} ${sourceSerif.variable} h-full antialiased`}
+      className={`${nunito.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
         <a
@@ -45,6 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <SiteHeader />
         <div className="flex flex-1 flex-col">{children}</div>
         <SiteFooter />
+        <ToastHost />
       </body>
     </html>
   );

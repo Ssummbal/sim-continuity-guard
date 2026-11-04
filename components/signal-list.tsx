@@ -3,7 +3,7 @@ import type { RiskSignal } from "@/lib/types";
 export function SignalList({ signals }: { signals: RiskSignal[] }) {
   if (signals.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-line bg-surface-muted/50 px-5 py-8 text-center">
+      <div className="rounded-[var(--radius-lg)] border border-dashed border-ghost-strong/25 bg-ghost-soft/40 px-5 py-8 text-center">
         <p className="text-sm font-semibold">No elevated-risk signals</p>
         <p className="mx-auto mt-1 max-w-sm text-sm leading-relaxed text-muted">
           None of the configured signals were triggered for this case.
@@ -13,11 +13,11 @@ export function SignalList({ signals }: { signals: RiskSignal[] }) {
   }
 
   return (
-    <ol className="divide-y divide-line overflow-hidden rounded-xl border border-line bg-surface">
+    <ol className="divide-y divide-line overflow-hidden rounded-[var(--radius-lg)] border border-line bg-surface">
       {signals.map((signal, index) => (
         <li
           key={signal.id}
-          className="flex flex-col gap-3 p-5 sm:flex-row sm:gap-5"
+          className="flex flex-col gap-3 p-5 transition-colors hover:bg-ghost-soft/25 sm:flex-row sm:gap-5"
         >
           <span
             className="font-mono text-xs font-medium leading-6 text-muted"

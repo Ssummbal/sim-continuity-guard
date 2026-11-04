@@ -20,7 +20,7 @@ export function ScoreRing({
     <div
       role="img"
       aria-label={`Risk score ${clampedScore} out of 100`}
-      className="relative grid size-36 shrink-0 place-items-center rounded-full"
+      className="relative grid size-36 shrink-0 place-items-center rounded-full shadow-[0_18px_36px_-24px_var(--ghost-shadow)]"
       style={{
         background: `conic-gradient(${ringColors[level]} ${degrees}deg, var(--ring-track) ${degrees}deg 360deg)`,
       }}

@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { signIn, signUp } from "@/app/login/actions";
+import { showToast } from "@/lib/toast";
 import type { LoginActionState } from "@/lib/types";
 
 const initialState: LoginActionState = {};
@@ -33,6 +34,12 @@ export function LoginForm() {
   const isSignUp = mode === "signup";
   const state = isSignUp ? signUpState : signInState;
   const pending = isSignUp ? signUpPending : signInPending;
+
+  useEffect(() => {
+    if (state.error) {
+      showToast(state.error, "error");
+    }
+  }, [state.error]);
 
   return (
     <div className="space-y-5">
@@ -75,7 +82,7 @@ export function LoginForm() {
       {state.message ? (
         <div
           role="status"
-          className="rounded-lg border border-risk-low/30 bg-risk-low-soft/60 px-3.5 py-3 text-sm leading-relaxed text-risk-low"
+          className="rounded-[var(--radius-md)] border border-mint/30 bg-mint-soft/70 px-3.5 py-3 text-sm leading-relaxed text-mint-strong"
         >
           {state.message}
         </div>

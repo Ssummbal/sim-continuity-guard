@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useState, type FormEvent } from "react";
+import { useActionState, useEffect, useState, type FormEvent } from "react";
 import { submitAssessment } from "@/app/assess/actions";
+import { showToast } from "@/lib/toast";
 import type {
   AssessmentActionState,
   AssessmentFieldErrors,
@@ -74,6 +75,12 @@ export function AssessForm() {
     ),
   );
 
+  useEffect(() => {
+    if (state.message) {
+      showToast(state.message, "error");
+    }
+  }, [state.message]);
+
   function updateField<K extends keyof AssessmentFormValues>(
     field: K,
     value: AssessmentFormValues[K],
@@ -100,6 +107,7 @@ export function AssessForm() {
     if (Object.keys(result.errors).length > 0) {
       event.preventDefault();
       setClientErrors(result.errors);
+      showToast("Please correct the highlighted fields.", "error");
       return;
     }
 
@@ -133,8 +141,8 @@ export function AssessForm() {
         </span>
       </div>
 
-      <div className="mt-6 rounded-xl border border-line bg-surface-muted/50 p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+      <div className="mt-6 rounded-[var(--radius-lg)] border border-ghost-strong/15 bg-ghost-soft/50 p-4">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-ghost-strong">
           Quick presets
         </p>
         <div className="mt-2 flex flex-wrap gap-2">

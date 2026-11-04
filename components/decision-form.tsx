@@ -1,7 +1,8 @@
 "use client";
 
-import { useActionState, useState, type FormEvent } from "react";
+import { useActionState, useEffect, useState, type FormEvent } from "react";
 import { submitDecision } from "@/app/queue/[id]/actions";
+import { showToast } from "@/lib/toast";
 import type { DecisionActionState, DecisionFieldErrors } from "@/lib/types";
 import { validateDecisionValues } from "@/lib/validation";
 
@@ -34,12 +35,19 @@ export function DecisionForm({
     ),
   );
 
+  useEffect(() => {
+    if (state.message) {
+      showToast(state.message, "error");
+    }
+  }, [state.message]);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     const result = validateDecisionValues(reviewer, reason);
 
     if (Object.keys(result).length > 0) {
       event.preventDefault();
       setClientErrors(result);
+      showToast("Please correct the highlighted fields.", "error");
       return;
     }
 

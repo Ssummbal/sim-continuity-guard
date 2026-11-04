@@ -124,27 +124,39 @@ async function QueueContent({
   return (
     <>
       <dl className="grid gap-4 sm:grid-cols-3">
-        <div className="card p-5">
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <div className="card card-interactive relative overflow-hidden p-5">
+          <div
+            className="pointer-events-none absolute -right-5 -top-8 size-24 rounded-full bg-ghost-soft"
+            aria-hidden="true"
+          />
+          <dt className="relative text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
             Pending review
           </dt>
-          <dd className="mt-2 font-serif text-3xl font-semibold tabular-nums">
+          <dd className="relative mt-2 font-serif text-3xl font-bold tabular-nums">
             {pending.length}
           </dd>
         </div>
-        <div className="card p-5">
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <div className="card card-interactive relative overflow-hidden p-5">
+          <div
+            className="pointer-events-none absolute -right-5 -top-8 size-24 rounded-full bg-risk-high-soft"
+            aria-hidden="true"
+          />
+          <dt className="relative text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
             Urgent pending
           </dt>
-          <dd className="mt-2 font-serif text-3xl font-semibold tabular-nums text-risk-high">
+          <dd className="relative mt-2 font-serif text-3xl font-bold tabular-nums text-risk-high">
             {urgent}
           </dd>
         </div>
-        <div className="card p-5">
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <div className="card card-interactive relative overflow-hidden p-5">
+          <div
+            className="pointer-events-none absolute -right-5 -top-8 size-24 rounded-full bg-mint-soft"
+            aria-hidden="true"
+          />
+          <dt className="relative text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
             Oldest pending
           </dt>
-          <dd className="mt-2 font-serif text-3xl font-semibold tabular-nums">
+          <dd className="relative mt-2 font-serif text-3xl font-bold tabular-nums">
             {oldestPending ? `${formatAge(oldestPending)} ago` : "None"}
           </dd>
         </div>
@@ -153,7 +165,7 @@ async function QueueContent({
       <form
         method="get"
         action="/queue"
-        className="card mt-5 p-4 sm:p-5"
+        className="card mt-5 border-ghost-strong/10 p-4 sm:p-5"
         aria-label="Filter cases"
       >
         <div className="flex flex-col gap-4 md:flex-row md:items-end">
@@ -243,7 +255,7 @@ async function QueueContent({
       ) : (
         <ul className="mt-4 space-y-3">
           {visible.map((item) => (
-            <li key={item.id} className="card">
+            <li key={item.id} className="card card-interactive">
               <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
                   <div className="flex flex-wrap gap-2">
@@ -256,7 +268,7 @@ async function QueueContent({
                   <div className="mt-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
                     <Link
                       href={`/queue/${item.id}`}
-                      className="font-mono text-sm font-semibold text-accent underline-offset-4 hover:underline"
+                      className="font-mono text-sm font-semibold text-ghost-strong underline-offset-4 hover:underline"
                     >
                       {item.id}
                     </Link>

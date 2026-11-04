@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { AssessForm } from "@/components/assess-form";
 import { RiskBadge } from "@/components/badges";
+import { EchoMascot } from "@/components/echo-mascot";
 import { AssessSkeleton } from "@/components/skeletons";
 import { requireUser } from "@/lib/auth";
 import { RISK_THRESHOLDS, RISK_WEIGHTS } from "@/lib/risk";
@@ -128,13 +129,18 @@ async function AssessContent() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-accent/20 bg-accent-soft p-6 shadow-[var(--shadow-sm)]">
-            <p className="eyebrow">Human in the loop</p>
-            <p className="mt-2 text-sm leading-relaxed text-foreground">
+          <section className="relative overflow-hidden rounded-[var(--radius-lg)] border border-mint/25 bg-mint-soft/60 p-6 shadow-[var(--shadow-sm)]">
+            <EchoMascot
+              mood="thinking"
+              idPrefix="assess-echo"
+              className="absolute -bottom-6 -right-4 w-28 opacity-80"
+            />
+            <p className="eyebrow relative">Human in the loop</p>
+            <p className="relative mt-2 max-w-[15rem] text-sm leading-relaxed text-foreground">
               The assessment is advisory. A named reviewer makes every
               consequential decision and records a written reason.
             </p>
-            <p className="mt-3 text-xs leading-relaxed text-muted">
+            <p className="relative mt-3 max-w-[15rem] text-xs leading-relaxed text-muted">
               Prototype data is held in memory and resets when the server
               restarts.
             </p>

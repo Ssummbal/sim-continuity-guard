@@ -58,27 +58,39 @@ async function AuditContent() {
   return (
     <>
       <dl className="grid gap-4 sm:grid-cols-3">
-        <div className="card p-5">
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <div className="card card-interactive relative overflow-hidden p-5">
+          <div
+            className="pointer-events-none absolute -right-5 -top-8 size-24 rounded-full bg-ghost-soft"
+            aria-hidden="true"
+          />
+          <dt className="relative text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
             Total entries
           </dt>
-          <dd className="mt-2 font-serif text-3xl font-semibold tabular-nums">
+          <dd className="relative mt-2 font-serif text-3xl font-bold tabular-nums">
             {entries.length}
           </dd>
         </div>
-        <div className="card p-5">
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <div className="card card-interactive relative overflow-hidden p-5">
+          <div
+            className="pointer-events-none absolute -right-5 -top-8 size-24 rounded-full bg-mint-soft"
+            aria-hidden="true"
+          />
+          <dt className="relative text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
             Human decisions
           </dt>
-          <dd className="mt-2 font-serif text-3xl font-semibold tabular-nums">
+          <dd className="relative mt-2 font-serif text-3xl font-bold tabular-nums">
             {humanDecisions}
           </dd>
         </div>
-        <div className="card p-5">
-          <dt className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+        <div className="card card-interactive relative overflow-hidden p-5">
+          <div
+            className="pointer-events-none absolute -right-5 -top-8 size-24 rounded-full bg-warm-soft"
+            aria-hidden="true"
+          />
+          <dt className="relative text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
             Auto-cleared by policy
           </dt>
-          <dd className="mt-2 font-serif text-3xl font-semibold tabular-nums">
+          <dd className="relative mt-2 font-serif text-3xl font-bold tabular-nums">
             {automated}
           </dd>
         </div>
@@ -108,7 +120,7 @@ async function AuditContent() {
               <caption className="sr-only">
                 Audit log of automated clearances and human decisions
               </caption>
-              <thead className="border-b border-line bg-surface-muted/60 text-[11px] uppercase tracking-[0.12em] text-muted">
+              <thead className="border-b border-line bg-ghost-soft/60 text-[11px] uppercase tracking-[0.12em] text-muted">
                 <tr>
                   <th scope="col" className="px-5 py-3 font-semibold">
                     Case
@@ -131,12 +143,12 @@ async function AuditContent() {
                 {entries.map((entry) => (
                   <tr
                     key={entry.id}
-                    className="align-top transition-colors hover:bg-surface-muted/30"
+                    className="align-top transition-colors hover:bg-ghost-soft/40"
                   >
                     <th scope="row" className="px-5 py-4 font-normal">
                       <Link
                         href={`/cases/${entry.caseId}`}
-                        className="font-mono text-sm font-semibold text-accent underline-offset-4 hover:underline"
+                        className="font-mono text-sm font-semibold text-ghost-strong underline-offset-4 hover:underline"
                       >
                         {entry.caseId}
                       </Link>
@@ -171,11 +183,11 @@ async function AuditContent() {
 
           <ul className="mt-3 space-y-3 lg:hidden">
             {entries.map((entry) => (
-              <li key={entry.id} className="card p-5">
+              <li key={entry.id} className="card card-interactive p-5">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <Link
                     href={`/cases/${entry.caseId}`}
-                    className="font-mono text-sm font-semibold text-accent underline-offset-4 hover:underline"
+                    className="font-mono text-sm font-semibold text-ghost-strong underline-offset-4 hover:underline"
                   >
                     {entry.caseId}
                   </Link>

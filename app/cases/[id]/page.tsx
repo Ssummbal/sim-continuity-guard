@@ -9,6 +9,7 @@ import {
   UrgentBadge,
 } from "@/components/badges";
 import { CaseFacts } from "@/components/case-facts";
+import { Celebration } from "@/components/celebration";
 import { Chat } from "@/components/chat";
 import { OutcomePanel } from "@/components/outcome-panel";
 import { ScoreRing } from "@/components/score-ring";
@@ -99,8 +100,15 @@ async function CaseContent({
 
       <div className="mt-8 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-8">
-          <section className="card p-6 sm:p-8" aria-labelledby="assessment-heading">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+          <section
+            className="card relative overflow-hidden p-6 sm:p-8"
+            aria-labelledby="assessment-heading"
+          >
+            <div
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_92%_8%,var(--ghost-soft),transparent_42%)]"
+              aria-hidden="true"
+            />
+            <div className="relative flex flex-col gap-6 sm:flex-row sm:items-center">
               <ScoreRing score={item.score} level={item.level} />
               <div className="min-w-0">
                 <p className="eyebrow">Assessment</p>
@@ -172,6 +180,13 @@ async function CaseContent({
           </section>
         </aside>
       </div>
+
+      {item.status === "approved" ? (
+        <Celebration
+          onceKey={`scg-approved-${item.id}`}
+          message="Case approved. The audit log has been updated."
+        />
+      ) : null}
 
       <div className="mt-10">
         <Chat />
